@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature and Humidity</title>
+    <script>
+        function fetchSensorData() {
+            fetch('/sensor-data')  
+                .then(response => response.json())  
+                .then(data => {
+                    if (data.temperature !== null && data.humidity !== null) {
+                        document.getElementById('temperature').textContent = `Temperature: ${data.temperature}°C`;
+                        document.getElementById('humidity').textContent = `Humidity: ${data.humidity}%`;
+                        document.getElementById('error').textContent = '';  
+                    } else {
+                        document.getElementById('error').textContent = 'Failed to retrieve data from sensor';
+                    }
+                })
+                .catch(err => {
+                    console.error('Error fetching sensor data:', err);
+                    document.getElementById('error').textContent = 'Error fetching data';
+                });
+        }
+
+       
+        setInterval(fetchSensorData, 2000);
+        window.onload = fetchSensorData;  
+    </script>
+</head>
+<body>
+    <h1>Temperature and Humidity Data</h1>
+    <p id="error" style="color: red;"></p>
+    <p id="temperature">Loading temperature...</p>
+    <p id="humidity">Loading humidity...</p>
+</body>
+</html>
